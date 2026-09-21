@@ -171,7 +171,15 @@ function hay_fichas(equipo){        //verifica si hay fichas del equipo
 
 //----- Funcion de imprimir tablero
 function imprimir_tablero() {
-    const iconos = { 0: "·", 1: "●", 2: "\x1b[31m○", 3: "♛", 4: "\x1b[31m♕" };
+    // \x1b[97m = Blanco brillante | \x1b[91m = Rojo brillante
+    const iconos = { 
+        0: "·", 
+        1: "\x1b[97m●", 
+        2: "\x1b[91m●", 
+        3: "\x1b[97m♛", 
+        4: "\x1b[91m♛" 
+    };
+
     for (let i = 0; i < tablero.length; i++) {
         let fila = " ";
         for (let j = 0; j < tablero[i].length; j++) {
@@ -182,11 +190,10 @@ function imprimir_tablero() {
                 else{
                     fila += ` ${tablero[i][j]} \x1b[0m`;
                 }
-                
             }
             else{
-                
-                const bg = (i + j) % 2 === 0 ? '\x1b[46m' : '\x1b[40m'; //bg = backgroud    \x1b = Esc  46m = cian  40m = negro
+                // \x1b[100m = Fondo gris oscuro (casilla jugable) | \x1b[47m = Fondo blanco/gris claro
+                const bg = (i + j) % 2 === 0 ? '\x1b[47m' : '\x1b[100m';
                 fila += `${bg} ${iconos[tablero[i][j]]} \x1b[0m`;
             }
         }
@@ -263,7 +270,7 @@ async function cadena_captura(posicion, corono){
 
 //---- Funcion asincronada que determina el turno del jugador
 async function turno_jugador(){     //funcion asincronada = async function
-    console.log(`Turno: ${turno === ficha1 ? "Blancas (●)" : "Rojas (o)"}`);
+    console.log(`Turno: ${turno === ficha1 ? "\x1b[97mBlancas (●)\x1b[0m" : "\x1b[91mRojas (●)\x1b[0m"}`);
 
     const obligadas = obligar_captur ? fichas_pueden_comer(turno) : [];
 
